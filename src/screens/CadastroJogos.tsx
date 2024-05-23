@@ -77,7 +77,6 @@ function CadastroJogos(): React.JSX.Element {
     const cadastrarJogos = async () => {
         if (validateForm()){    
         try {
-
             const formData = new FormData();
             formData.append('nome', nome);
             formData.append('preco',preco);
@@ -88,12 +87,10 @@ function CadastroJogos(): React.JSX.Element {
             formData.append('distribuidora', distribuidora);
             formData.append('categoria', categoria);
 
-            const response = await axios.post('http://10.137.11.205:8000/api/register/games', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
-            console.log(response)
+            console.log(formData)
+
+            const response = await axios.post("http://10.137.11.205:8000/api/register/games", formData);
+         console.log(response.data)
         } catch (error) {
             if (error.response && error.response.data && error.response.data.errors){
                 setErrors(error.response.data.errors);
@@ -104,13 +101,12 @@ function CadastroJogos(): React.JSX.Element {
     }
 
 }
-
     return (
         <View style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
-            <StatusBar backgroundColor={'white'}></StatusBar>
+            <StatusBar backgroundColor={'#CAD49D'}></StatusBar>
             <View style={styles.header}>
-                <Image style={styles.imagem} resizeMode="contain" source={require('../assets/images/logos.png')}></Image>
+                <Image style={styles.imagem} resizeMode="contain" source={require('../assets/imagem/logos.png')}></Image>
             </View>
 
             <View style={styles.form}>
@@ -205,10 +201,10 @@ function CadastroJogos(): React.JSX.Element {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#90EE90'
+        backgroundColor: '#484538'
     },
     header: {
-        backgroundColor: '#8FBC8F',
+        backgroundColor: '#CAD49D',
         alignItems: 'center',
         paddingVertical: 100,
         borderBottomLeftRadius: 0,
@@ -223,13 +219,13 @@ const styles = StyleSheet.create({
 
     },
     input: {
-        backgroundColor: '#DEB887',
-        marginTop: 32,
+        backgroundColor: '#D2B48C',
+        marginTop: 40,
         fontWeight: 'bold',
-        height: 40,
+        height: 42,
         borderRadius: 15,
         color: 'white',
-        paddingLeft: 1,
+        paddingLeft: 3,
         marginLeft: 10,
         marginRight: 10
     },
