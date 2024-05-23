@@ -9,8 +9,17 @@ function Footer(): React.JSX.Element {
 
     return(
         <View style={styles.footer}>
-             <TouchableOpacity onPress={() => navigation.navigate('Cadastro')}>
-                <Image source={require('../assets/images/lista.png')} style={styles.cadastroIcon}/>
+            <TouchableOpacity onPress={() => navigation.navigate('Cadastro')}>
+                <Image source={require('../assets/images/cadastro.png')} style={styles.icon}/>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Listagem')}>
+                <Image source={require('../assets/images/lista.png')} style={styles.icon}/>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Pesquisa')}>
+                <Image source={require('../assets/images/lupa.png')} style={styles.icon}/>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Atualizar')}>
+                <Image source={require('../assets/images/atualizar.png')} style={styles.icon}/>
             </TouchableOpacity>
         </View>
     );
@@ -21,20 +30,20 @@ const styles = StyleSheet.create({
         flexGrow: 1
     },
     footer: {
-        paddingVertical: 5,
-        backgroundColor: '#8FBC8F',
-        marginTop: 100,
+        paddingVertical: 2,
+        backgroundColor: '#CAD49D',
+        marginTop: 14,
         alignItems: 'center',
         borderTopRightRadius: 40,
         borderTopLeftRadius: 40,
+        flexDirection:'row'
     },
-    cadastroIcon: {
-        width: 38,
-        height: 38,
-        marginBottom: 9,
-        marginLeft: 260
-
-    
+    icon: {
+        width: 40,
+        height: 40,
+        marginBottom: 15,
+        marginLeft: 42,
+        marginVertical: 8
     }
 });
 
