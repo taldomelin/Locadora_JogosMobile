@@ -89,9 +89,9 @@ function ListagemJogos(): React.JSX.Element {
           <TouchableOpacity style={styles.botaoDeletar} onPress={() => handleDelete(item.id)}>
             <Text style={styles.botaoText}>Deletar</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.botaoEditar} onPress={() => navigation.navigate('Editar')}>
-            <Text style={styles.botaoText}>Editar</Text>
-          </TouchableOpacity>
+<TouchableOpacity style={styles.botaoEditar} onPress={() => navigation.navigate('Editar', { jogo: item })}>
+  <Text style={styles.botaoText}>Editar</Text>
+</TouchableOpacity>
         </View>
       </View>
     );
