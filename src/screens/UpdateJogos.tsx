@@ -4,8 +4,10 @@ import { ScrollView, StatusBar, StyleSheet, TextInput, TouchableOpacity, } from 
 import { Image, View, Text } from "react-native-animatable";
 import Footer from "../interface/Footer";
 
-function CadastroJogos(): React.JSX.Element {
+
+function UpdateJogos(): React.JSX.Element {
     const [jogos, setJogos] = useState<Jogos[]>([]);
+    const [id, setId] = useState<string>("");
     const [nome, setNome] = useState<string>("");
     const [preco, setPreco] = useState<string>("");
     const [descricao, setDescricao] = useState<string>("");
@@ -74,10 +76,11 @@ function CadastroJogos(): React.JSX.Element {
       };
     
 
-    const cadastrarJogos = async () => {
+    const updateJogos = async () => {
         if (validateForm()){    
         try {
             const formData = new FormData();
+            formData.append('id', id);
             formData.append('nome', nome);
             formData.append('preco',preco);
             formData.append('descricao', descricao);
@@ -89,28 +92,35 @@ function CadastroJogos(): React.JSX.Element {
 
             console.log(formData)
 
-            const response = await axios.post('http://10.137.11.205:8000/api/register/games', formData, {
-                headers: {
-                  'Content-Type': 'multipart/form-data'
-                }
-              });
-              console.log(response)
-            } catch (error) {
-              if (error.response && error.response.data && error.response.data.errors) {
+            const response = await axios.put("http://10.137.11.205:8000/api/update/game", formData);
+         console.log(response.data)
+        } catch (error) {
+            if (error.response && error.response.data && error.response.data.errors){
                 setErrors(error.response.data.errors);
-              } else {
+            } else{
                 console.log(error);
-              }
             }
-          }
-      
         }
+    }
+
+}
     return (
         <View style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
             <StatusBar backgroundColor={'#CAD49D'}></StatusBar>
             <View style={styles.header}>
                 <Image style={styles.imagem} resizeMode="contain" source={require('../assets/images/logos.png')}></Image>
+            </View>
+
+            <View style={styles.form}>
+                <TextInput style={styles.input}
+                    placeholder="Id:"
+                    placeholderTextColor={'white'}
+                    value={id}
+                    onChangeText={setId}
+                />
+                {errors.id && <Text style={styles.errorText}>{errors.id}</Text>}
+                
             </View>
 
             <View style={styles.form}>
@@ -192,8 +202,8 @@ function CadastroJogos(): React.JSX.Element {
                 
             </View>
             
-            <TouchableOpacity style={styles.button} onPress={cadastrarJogos}>
-                <Text style={styles.buttonText}>Cadastrar</Text>
+            <TouchableOpacity style={styles.button} onPress={updateJogos}>
+                <Text style={styles.buttonText}>Atualizar</Text>
             </TouchableOpacity>
             <Footer/>
             </ScrollView>
@@ -270,4 +280,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default CadastroJogos;
+export default UpdateJogos;

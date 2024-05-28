@@ -4,40 +4,63 @@ import {  FlatList, Image, StatusBar, StyleSheet, Text, TouchableOpacity } from 
 import { View } from "react-native-animatable";
 import Footer from "../interface/Footer";
 
+
 function JogosListagem(): React.JSX.Element {
     const [jogos, setJogos] = useState<Jogos[]>([]);
+    const [filteredJogos, setFilteredJogos] = useState<Jogos[]>(jogos);
+    const [loading, setLoading] = useState(false);
+
 
     useEffect(() => {
-        const fetchProdutos = async () => {
-            try {
-                const response = await axios.get('http://10.137.11.205:8000/api/return/all/games');
-                if (Array.isArray(response.data.data)) {
-                  setJogos(response.data.data);
-                } else {
-                  // console.error('A API deve retornar um array de jogos');
-                }
-              } catch (error) {
-                // console.error(`Erro: ${error.message}`);
-                // if (error.response) {
-                //   console.error(`Status: ${error.response.status} ${error.response.statusText}`);
-                // }
-              }
-            };
+      const fetchData = async () => {
+        setLoading(true);
+        try {
+          const response = await axios.get('http://10.137.11.205:8000/api/return/all/games');
+          if (Array.isArray(response.data.data)) {
+            setJogos(response.data.data);
+            setFilteredJogos(response.data.data);
+          } else {
+            // console.error('A API deve retornar um array de jogos');
+          }
+        } catch (error) {
+          // console.error(`Erro: ${error.message}`);
+          // if (error.response) {
+          //   console.error(`Status: ${error.response.status} ${error.response.statusText}`);
+          // }
+        }
+        setLoading(false);
+      };
 
-        fetchProdutos();
+        fetchData();
     }, []);
+
+    const handleDelete = async (id: number) => {
+        try {
+          await axios.delete(`http://10.137.11.205:8000/api/delete/game/${id}`);
+          setJogos(jogos.filter((jogo) => jogo.id !== id));
+          setFilteredJogos(filteredJogos.filter((jogo) => jogo.id !== id));
+        } catch (error) {
+          // console.error(`Erro: ${error.message}`);
+          // if (error.response) {
+          //   console.error(`Status: ${error.response.status} ${error.response.statusText}`);
+          // }
+        }
+      };
+    
 
       const renderJogosItem = ({ item }: { item: Jogos }) => (
         <View style={styles.jogosContainer}>
             <Text style={styles.textJogos}>{`Nome:     ${item.nome}`}</Text>
             <Text style={styles.textPreco}>{`Preço:      ${item.preco}`}</Text>
             <Text style={styles.textJogos}>{`Descrição: ${item.descricao}`}</Text>
-            <Text style={styles.textJogos}>{`Classificação:     ${item.classificacao}`}</Text>
-            <Text style={styles.textJogos}>{`Plataformas:     ${item.plataformas}`}</Text>
+            <Text style={styles.textJogos}>{`Classificação:      ${item.classificacao}`}</Text>
+            <Text style={styles.textJogos}>{`Plataformas:       ${item.plataformas}`}</Text>
             <Text style={styles.textJogos}>{`Desenvolvedor:  ${item.desenvolvedor}`}</Text>
             <Text style={styles.textJogos}>{`Distribuidora:      ${item.distribuidora}`}</Text>
-            <Text style={styles.textJogos}>{`Categoria:             ${item.categoria}`}</Text>
-            
+            <Text style={styles.textJogos}>{`Categoria:            ${item.categoria}`}</Text>
+            <TouchableOpacity style={styles.botao} onPress={() => handleDelete(item.id)}>
+          <Text style={styles.botaoText}>Deletar</Text>
+        </TouchableOpacity>
         </View>
     );
 
@@ -64,7 +87,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#484538'
     },
     header: {
-        backgroundColor: '#CAD49D',
+        backgroundColor: '#067451',
         alignItems: 'center',
         paddingVertical: 80,
         borderBottomLeftRadius: 100,
@@ -99,16 +122,33 @@ const styles = StyleSheet.create({
     },
     jogosContainer: {
     marginTop: 20,
-    backgroundColor: '#CAD49D',
+    backgroundColor: '#8FD694',
     padding: 5,
     borderRadius: 20,
     alignSelf: 'center',
     alignItems: 'center',
     width: 370,
-    height: 530,
+    height: 580,
     flexDirection: 'column',
     justifyContent: 'space-between'
-    }
+    },
+    botaoText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: 'white',
+        textAlign: 'center',
+      },
+      botao: {
+        backgroundColor: '#6F8F72',
+        padding: 10,
+        borderRadius: 15,
+        marginTop: 12,
+        height: 42,
+        width: '60%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+      },
 })
 
 export default JogosListagem;

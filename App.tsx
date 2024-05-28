@@ -3,6 +3,7 @@ import CadastroJogos from "./src/screens/CadastroJogos";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import JogosListagem from "./src/screens/ListagemJogos";
+import UpdateJogos from "./src/screens/UpdateJogos";
 
 const Stack = createStackNavigator();
 
@@ -11,6 +12,7 @@ function App(): React.ReactElement {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Listagem" component={JogosListagem} options={{ headerShown: false}}/>
+        <Stack.Screen name="Cadasatro" component={CadastroJogos} options={{ headerShown: false}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
