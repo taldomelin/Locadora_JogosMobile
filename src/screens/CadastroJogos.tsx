@@ -25,13 +25,13 @@ function CadastroJogos(): React.JSX.Element {
     } else if (nome.length < 5 || nome.length > 120) {
       newErrors.nome = "O campo nome deve ter entre 5 e 120 caracteres";
     }
-  
+
     if (!preco) {
       newErrors.preco = "O campo preço é obrigatório";
-    } else if (!/^\d+(\.\d{1,2})?$/.test(preco)) {
-      newErrors.preco = "O campo preço deve ser um número decimal com no máximo 2 casas decimais";
+    } else if (!/^\d+(\.\d{2})$/.test(preco)) {
+      newErrors.preco = "O campo preço deve ter 2 casas decimais";
     }
-
+    
     if (!descricao) {
       newErrors.descricao = "O campo descrição é obrigatório";
     } else if (descricao.length < 10 || descricao.length > 800) {
@@ -76,8 +76,8 @@ function CadastroJogos(): React.JSX.Element {
 
   const cadastrarJogos = async () => {
     if (validateForm()) {
+      console.log('Formulário válido!');
       try {
-
         const formData = new FormData();
         formData.append('nome', nome);
         formData.append('preco', preco);
@@ -87,23 +87,41 @@ function CadastroJogos(): React.JSX.Element {
         formData.append('desenvolvedor', desenvolvedor);
         formData.append('distribuidora', distribuidora);
         formData.append('categoria', categoria);
-
+  
+        console.log('FormData:', formData);
+  
         const response = await axios.post('http://10.137.11.205:8000/api/register/games', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         });
-        console.log(response)
-      } catch (error) {
-        if (error.response && error.response.data && error.response.data.errors) {
-          setErrors(error.response.data.errors);
+        console.log('Response:', response);
+        if (response.status === 200) {
+          resetFields();
+          console.log('Cadastro realizado com sucesso!');
         } else {
-          console.log(error);
+          console.log('Erro ao cadastrar:', response.status);
         }
+      } catch (error) {
+        console.log('Erro ao cadastrar:', error);
       }
+    } else {
+      console.log('Formulário inválido!');
     }
-
-  }
+  };
+  
+  const resetFields = () => {
+    setNome('');
+    setPreco('');
+    setDescricao('');
+    setClassificacao('');
+    setPlataformas('');
+    setDesenvolvedor('');
+    setDistribuidora('');
+    setCategoria('');
+    setErrors('');
+  };
+  
   const navigation = useNavigation();
   return (
     <View style={styles.container}>

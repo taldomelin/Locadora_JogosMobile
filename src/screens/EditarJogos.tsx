@@ -9,16 +9,16 @@ interface Props {
 }
 
 const EditarJogos: React.FC<Props> = ({ route }) => {
-  const jogo = route.params.jogo ?? {}; // fornecer um objeto vazio como padrão
-  const [nome, setNome] = useState(jogo.nome ?? ''); // fornecer um valor padrão vazio
-  const [preco, setPreco] = useState(jogo.preco ?? '');
-  const [descricao, setDescricao] = useState(jogo.descricao ?? '');
-  const [classificacao, setClassificacao] = useState(jogo.classificacao ?? '');
-  const [plataformas, setPlataformas] = useState(jogo.plataformas ?? '');
-  const [desenvolvedor, setDesenvolvedor] = useState(jogo.desenvolvedor ?? '');
-  const [distribuidora, setDistribuidora] = useState(jogo.distribuidora ?? '');
-  const [categoria, setCategoria] = useState(jogo.categoria ?? '');
-  const [error, setError] = useState(null); // estado para armazenar erros
+  const jogo = route.params.jogo?? {}; // fornecer um objeto vazio como padrão
+  const [nome, setNome] = useState(jogo.nome?? ''); // fornecer um valor padrão vazio
+  const [preco, setPreco] = useState(jogo.preco?? '');
+  const [descricao, setDescricao] = useState(jogo.descricao?? '');
+  const [classificacao, setClassificacao] = useState(jogo.classificacao?? '');
+  const [plataformas, setPlataformas] = useState(jogo.plataformas?? '');
+  const [desenvolvedor, setDesenvolvedor] = useState(jogo.desenvolvedor?? '');
+  const [distribuidora, setDistribuidora] = useState(jogo.distribuidora?? '');
+  const [categoria, setCategoria] = useState(jogo.categoria?? '');
+  const [errors, setErrors] = useState({}); // estado para armazenar erros
 
   useEffect(() => {
     // lidar com a atualização do estado quando o componente é montado ou desmontado
@@ -29,7 +29,7 @@ const EditarJogos: React.FC<Props> = ({ route }) => {
       console.error("Jogo ID doesn't exist!");
       return;
     }
-  
+
     const data = {
       nome,
       preco,
@@ -40,17 +40,90 @@ const EditarJogos: React.FC<Props> = ({ route }) => {
       distribuidora,
       categoria,
     };
-    
+
+    let hasErrors = false;
+    const newErrors = {};
+
+    if (!nome) {
+      newErrors.nome = "O campo 'Nome' é obrigatório.";
+      hasErrors = true;
+    } else if (nome.length < 5 || nome.length > 120) {
+      newErrors.nome = "O campo 'Nome' deve ter entre 5 e 120 caracteres.";
+      hasErrors = true;
+    }
+
+    if (!preco) {
+      newErrors.preco = "O campo 'Preço' é obrigatório.";
+      hasErrors = true;
+    } else if (!/^\d+(\.\d{1,2})?$/.test(preco)) {
+      newErrors.preco = "O campo 'Preço' deve ser um número decimal com no máximo 2 casas decimais.";
+      hasErrors = true;
+    }
+
+    if (!descricao) {
+      newErrors.descricao = "O campo 'Descrição' é obrigatório.";
+      hasErrors = true;
+    } else if (descricao.length < 10 || descricao.length > 800) {
+      newErrors.descricao = "O campo 'Descrição' deve ter entre 10 e 800 caracteres.";
+      hasErrors = true;
+    }
+
+    if (!classificacao) {
+      newErrors.classificacao = "O campo 'Classificação' é obrigatório.";
+      hasErrors = true;
+    } else if (classificacao.length < 5 || classificacao.length > 20) {
+      newErrors.classificacao = "O campo 'Classificação' deve ter entre 5 e 20 caracteres.";
+      hasErrors = true;
+    }
+
+    if (!plataformas) {
+      newErrors.plataformas= "O campo 'Plataformas' é obrigatório.";
+      hasErrors = true;
+    } else if (plataformas.length < 3 || plataformas.length > 60) {
+      newErrors.plataformas = "O campo 'Plataformas' deve ter entre 3 e 60 caracteres.";
+      hasErrors = true;
+    }
+
+    if (!desenvolvedor) {
+      newErrors.desenvolvedor = "O campo 'Desenvolvedor' é obrigatório.";
+      hasErrors = true;
+    } else if (desenvolvedor.length < 2 || desenvolvedor.length > 120) {
+      newErrors.desenvolvedor = "O campo 'Desenvolvedor' deve ter entre 2 e 120 caracteres.";
+      hasErrors = true;
+    }
+
+    if (!distribuidora) {
+      newErrors.distribuidora = "O campo 'Distribuidora' é obrigatório.";
+      hasErrors = true;
+    } else if (distribuidora.length < 2 || distribuidora.length > 120) {
+      newErrors.distribuidora = "O campo 'Distribuidora' deve ter entre 2 e 120 caracteres.";
+      hasErrors = true;
+    }
+
+    if (!categoria) {
+      newErrors.categoria = "O campo 'Categoria' é obrigatório.";
+      hasErrors = true;
+    } else if (categoria.length < 3 || categoria.length > 55) {
+      newErrors.categoria = "O campo 'Categoria' deve ter entre 3 e 55 caracteres.";
+      hasErrors = true;
+    }
+
+    setErrors(newErrors);
+
+    if (hasErrors) {
+      return;
+    }
+
     try {
       const response = await axios.put(`http://10.137.11.205:8000/api/update/game/${jogo.id}`, data);
-  
+
       // Navegar para a página de listagem após a atualização ser concluída com sucesso
       navigation.navigate('Listagem');
     } catch (error) {
       console.error(error.response);
     }
   };
-  
+
   const navigation = useNavigation();
 
   return (
@@ -68,7 +141,7 @@ const EditarJogos: React.FC<Props> = ({ route }) => {
             value={nome}
             onChangeText={(text) => setNome(text)}
           />
-          {error && <Text style={styles.errorText}>{error}</Text>}
+          {errors.nome && <Text style={styles.errorText}>{errors.nome}</Text>}
         </View>
         <View style={styles.form}>
           <TextInput
@@ -78,17 +151,17 @@ const EditarJogos: React.FC<Props> = ({ route }) => {
             value={preco}
             onChangeText={(text) => setPreco(text)}
           />
-          {error && <Text style={styles.errorText}>{error}</Text>}
+          {errors.preco && <Text style={styles.errorText}>{errors.preco}</Text>}
         </View>
         <View style={styles.form}>
           <TextInput
             style={styles.input}
-            placeholder="Descrição:"
+            placeholder = "Descrição:"
             placeholderTextColor={'#000'}
             value={descricao}
             onChangeText={(text) => setDescricao(text)}
           />
-          {error && <Text style={styles.errorText}>{error}</Text>}
+          {errors.descricao && <Text style={styles.errorText}>{errors.descricao}</Text>}
         </View>
         <View style={styles.form}>
           <TextInput
@@ -98,7 +171,7 @@ const EditarJogos: React.FC<Props> = ({ route }) => {
             value={classificacao}
             onChangeText={(text) => setClassificacao(text)}
           />
-          {error && <Text style={styles.errorText}>{error}</Text>}
+          {errors.classificacao && <Text style={styles.errorText}>{errors.classificacao}</Text>}
         </View>
         <View style={styles.form}>
           <TextInput
@@ -108,7 +181,7 @@ const EditarJogos: React.FC<Props> = ({ route }) => {
             value={plataformas}
             onChangeText={(text) => setPlataformas(text)}
           />
-          {error && <Text style={styles.errorText}>{error}</Text>}
+          {errors.plataformas && <Text style={styles.errorText}>{errors.plataformas}</Text>}
         </View>
         <View style={styles.form}>
           <TextInput
@@ -118,7 +191,7 @@ const EditarJogos: React.FC<Props> = ({ route }) => {
             value={desenvolvedor}
             onChangeText={(text) => setDesenvolvedor(text)}
           />
-          {error && <Text style={styles.errorText}>{error}</Text>}
+          {errors.desenvolvedor && <Text style={styles.errorText}>{errors.desenvolvedor}</Text>}
         </View>
         <View style={styles.form}>
           <TextInput
@@ -128,7 +201,7 @@ const EditarJogos: React.FC<Props> = ({ route }) => {
             value={distribuidora}
             onChangeText={(text) => setDistribuidora(text)}
           />
-          {error && <Text style={styles.errorText}>{error}</Text>}
+          {errors.distribuidora && <Text style={styles.errorText}>{errors.distribuidora}</Text>}
         </View>
         <View style={styles.form}>
           <TextInput
@@ -138,7 +211,7 @@ const EditarJogos: React.FC<Props> = ({ route }) => {
             value={categoria}
             onChangeText={(text) => setCategoria(text)}
           />
-          {error && <Text style={styles.errorText}>{error}</Text>}
+          {errors.categoria && <Text style={styles.errorText}>{errors.categoria}</Text>}
         </View>
 
         <TouchableOpacity style={styles.button} onPress={handleUpdate}>
@@ -236,7 +309,7 @@ const styles = StyleSheet.create({
   errorText: {
     fontWeight: 'bold',
     marginLeft: 10,
-    color: 'ed'
+    color: 'red'
   },
 });
 
