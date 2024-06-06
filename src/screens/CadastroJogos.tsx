@@ -126,7 +126,7 @@ const cadastrarJogos = async () => {
       console.log('Erro ao cadastrar:', error);
     }
   } else {
-    console.log('Formulário inválido ou nome do jogo já existe!');
+    console.log('Formulário inválido!');
   }
 };
   
