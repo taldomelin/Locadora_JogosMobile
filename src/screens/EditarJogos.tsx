@@ -9,15 +9,15 @@ interface Props {
 }
 
 const EditarJogos: React.FC<Props> = ({ route }) => {
-  const jogo = route.params.jogo?? {}; // fornecer um objeto vazio como padrão
-  const [nome, setNome] = useState(jogo.nome?? ''); // fornecer um valor padrão vazio
-  const [preco, setPreco] = useState(jogo.preco?? '');
-  const [descricao, setDescricao] = useState(jogo.descricao?? '');
-  const [classificacao, setClassificacao] = useState(jogo.classificacao?? '');
-  const [plataformas, setPlataformas] = useState(jogo.plataformas?? '');
-  const [desenvolvedor, setDesenvolvedor] = useState(jogo.desenvolvedor?? '');
-  const [distribuidora, setDistribuidora] = useState(jogo.distribuidora?? '');
-  const [categoria, setCategoria] = useState(jogo.categoria?? '');
+  const jogo = route.params.jogo ?? {}; // fornecer um objeto vazio como padrão
+  const [nome, setNome] = useState(jogo.nome ?? ''); // fornecer um valor padrão vazio
+  const [preco, setPreco] = useState(jogo.preco ?? '');
+  const [descricao, setDescricao] = useState(jogo.descricao ?? '');
+  const [classificacao, setClassificacao] = useState(jogo.classificacao ?? '');
+  const [plataformas, setPlataformas] = useState(jogo.plataformas ?? '');
+  const [desenvolvedor, setDesenvolvedor] = useState(jogo.desenvolvedor ?? '');
+  const [distribuidora, setDistribuidora] = useState(jogo.distribuidora ?? '');
+  const [categoria, setCategoria] = useState(jogo.categoria ?? '');
   const [errors, setErrors] = useState({}); // estado para armazenar erros
 
   useEffect(() => {
@@ -45,66 +45,66 @@ const EditarJogos: React.FC<Props> = ({ route }) => {
     const newErrors = {};
 
     if (!nome) {
-      newErrors.nome = "O campo nome é obrigatório.";
+      newErrors.nome = "O campo nome é obrigatório"
       hasErrors = true;
     } else if (nome.length < 5 || nome.length > 120) {
-      newErrors.nome = "O campo nome deve ter entre 5 e 120 caracteres.";
+      newErrors.nome = "O campo nome deve ter entre 5 e 120 caracteres"
       hasErrors = true;
     }
 
     if (!preco) {
-      newErrors.preco = "O campo preço é obrigatório";
+      newErrors.preco = "O campo preço é obrigatório"
       hasErrors = true;
     } else if (!/^\d+(\.\d{2})$/.test(preco)) {
-      newErrors.preco = "O campo preço deve ter 2 casas decimais";
+      newErrors.preco = "O campo preço deve ter 2 casas decimais"
       hasErrors = true;
     }
 
     if (!descricao) {
-      newErrors.descricao = "O campo descrição é obrigatório.";
+      newErrors.descricao = "O campo descrição é obrigatório"
       hasErrors = true;
     } else if (descricao.length < 10 || descricao.length > 800) {
-      newErrors.descricao = "O campo descrição deve ter entre 10 e 800 caracteres.";
+      newErrors.descricao = "O campo descrição deve ter entre 10 e 800 caracteres"
       hasErrors = true;
     }
 
     if (!classificacao) {
-      newErrors.classificacao = "O campo classificação é obrigatório.";
+      newErrors.classificacao = "O campo classificação é obrigatório"
       hasErrors = true;
     } else if (classificacao.length < 5 || classificacao.length > 20) {
-      newErrors.classificacao = "O campo classificação deve ter entre 5 e 20 caracteres.";
+      newErrors.classificacao = "O campo classificação deve ter entre 5 e 20 caracteres"
       hasErrors = true;
     }
 
     if (!plataformas) {
-      newErrors.plataformas= "O campo plataformas é obrigatório.";
+      newErrors.plataformas = "O campo plataformas é obrigatório"
       hasErrors = true;
     } else if (plataformas.length < 3 || plataformas.length > 60) {
-      newErrors.plataformas = "O campo plataformas deve ter entre 3 e 60 caracteres.";
+      newErrors.plataformas = "O campo plataformas deve ter entre 3 e 60 caracteres"
       hasErrors = true;
     }
 
     if (!desenvolvedor) {
-      newErrors.desenvolvedor = "O campo desenvolvedor é obrigatório.";
+      newErrors.desenvolvedor = "O campo desenvolvedor é obrigatório"
       hasErrors = true;
     } else if (desenvolvedor.length < 2 || desenvolvedor.length > 120) {
-      newErrors.desenvolvedor = "O campo desenvolvedor deve ter entre 2 e 120 caracteres.";
+      newErrors.desenvolvedor = "O campo desenvolvedor deve ter entre 2 e 120 caracteres"
       hasErrors = true;
     }
 
     if (!distribuidora) {
-      newErrors.distribuidora = "O campo distribuidora é obrigatório.";
+      newErrors.distribuidora = "O campo distribuidora é obrigatório"
       hasErrors = true;
     } else if (distribuidora.length < 2 || distribuidora.length > 120) {
-      newErrors.distribuidora = "O campo distribuidora deve ter entre 2 e 120 caracteres.";
+      newErrors.distribuidora = "O campo distribuidora deve ter entre 2 e 120 caracteres"
       hasErrors = true;
     }
 
     if (!categoria) {
-      newErrors.categoria = "O campo categoria é obrigatório.";
+      newErrors.categoria = "O campo categoria é obrigatório"
       hasErrors = true;
     } else if (categoria.length < 3 || categoria.length > 55) {
-      newErrors.categoria = "O campo categoria deve ter entre 3 e 55 caracteres.";
+      newErrors.categoria = "O campo categoria deve ter entre 3 e 55 caracteres"
       hasErrors = true;
     }
 
@@ -156,7 +156,7 @@ const EditarJogos: React.FC<Props> = ({ route }) => {
         <View style={styles.form}>
           <TextInput
             style={styles.input}
-            placeholder = "Descrição:"
+            placeholder="Descrição:"
             placeholderTextColor={'#000'}
             value={descricao}
             onChangeText={(text) => setDescricao(text)}
@@ -220,15 +220,15 @@ const EditarJogos: React.FC<Props> = ({ route }) => {
       </ScrollView>
       <View style={styles.footer}>
         <TouchableOpacity onPress={() => navigation.navigate('Cadastro')}>
-          <Image 
-            source={require('../assets/images/documento.png')}
+          <Image
+            source={require('../assets/images/note.png')}
             style={styles.footerIcon}
           />
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => navigation.navigate('Listagem')}>
-          <Image 
-            source={require('../assets/images/menu.png')}
+          <Image
+            source={require('../assets/images/checklist.png')}
             style={styles.footerIcon}
           />
         </TouchableOpacity>
@@ -263,9 +263,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   footerIcon: {
-    width: 30,
-    height: 30
-},
+    width: 40,
+    height: 40
+  },
   form: {
     width: 360,
     marginLeft: 10,

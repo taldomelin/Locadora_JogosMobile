@@ -73,42 +73,62 @@ function CadastroJogos(): React.JSX.Element {
     return !Object.keys(newErrors).length;
   };
 
-
-  const cadastrarJogos = async () => {
-    if (validateForm()) {
-      console.log('Formulário válido!');
-      try {
-        const formData = new FormData();
-        formData.append('nome', nome);
-        formData.append('preco', preco);
-        formData.append('descricao', descricao);
-        formData.append('classificacao', classificacao);
-        formData.append('plataformas', plataformas);
-        formData.append('desenvolvedor', desenvolvedor);
-        formData.append('distribuidora', distribuidora);
-        formData.append('categoria', categoria);
   
-        console.log('FormData:', formData);
-  
-        const response = await axios.post('http://10.137.11.205:8000/api/register/games', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        });
-        console.log('Response:', response);
-        if (response.status === 200) {
-          resetFields();
-          console.log('Cadastro realizado com sucesso!');
-        } else {
-          console.log('Erro ao cadastrar:', response.status);
+  const checkUniqueName = async () => {
+    try {
+      const response = await axios.get(`http://10.137.11.205:8000/api/check/unique`, {
+        params: {
+          nome: nome
         }
-      } catch (error) {
-        console.log('Erro ao cadastrar:', error);
+      });
+      if (!response.data.status) {
+        setErrors({ uniqueName: response.data.message });
+        return false;
       }
-    } else {
-      console.log('Formulário inválido!');
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
     }
   };
+
+ 
+  
+const cadastrarJogos = async () => {
+  if (validateForm() && await checkUniqueName()) {
+    console.log('Formulário válido!');
+    try {
+      const formData = new FormData();
+      formData.append('nome', nome);
+      formData.append('preco', preco);
+      formData.append('descricao', descricao);
+      formData.append('classificacao', classificacao);
+      formData.append('plataformas', plataformas);
+      formData.append('desenvolvedor', desenvolvedor);
+      formData.append('distribuidora', distribuidora);
+      formData.append('categoria', categoria);
+
+      console.log('FormData:', formData);
+
+      const response = await axios.post('http://10.137.11.205:8000/api/register/games', formData, {
+        headers: {
+          'Content-Type': 'ultipart/form-data'
+        }
+      });
+      console.log('Response:', response);
+      if (response.status === 200) {
+        resetFields();
+        console.log('Cadastro realizado com sucesso!');
+      } else {
+        console.log('Erro ao cadastrar:', response.status);
+      }
+    } catch (error) {
+      console.log('Erro ao cadastrar:', error);
+    }
+  } else {
+    console.log('Formulário inválido ou nome do jogo já existe!');
+  }
+};
   
   const resetFields = () => {
     setNome('');
@@ -139,7 +159,7 @@ function CadastroJogos(): React.JSX.Element {
             onChangeText={setNome}
           />
           {errors.nome && <Text style={styles.errorText}>{errors.nome}</Text>}
-
+        {errors.uniqueName && <Text style={styles.errorText}>{errors.uniqueName}</Text>}
         </View>
         <View style={styles.form}>
           <TextInput style={styles.input}
@@ -217,14 +237,14 @@ function CadastroJogos(): React.JSX.Element {
         <View style={styles.footer}>
                 <TouchableOpacity onPress={() => navigation.navigate('Cadastro')}>
                     <Image 
-                    source={require('../assets/images/documento.png')}
+                    source={require('../assets/images/noteSelect.png')}
                     style={styles.footerIcon}
                     />
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={() => navigation.navigate('Listagem')}>
                     <Image 
-                    source={require('../assets/images/menu.png')}
+                    source={require('../assets/images/checklist.png')}
                     style={styles.footerIcon}
                     />
                 </TouchableOpacity>
@@ -262,8 +282,8 @@ const styles = StyleSheet.create({
     
   },
   footerIcon: {
-    width: 30,
-    height: 30
+    width: 40,
+    height: 40
 },
   form: {
     width: 360,
